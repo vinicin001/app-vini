@@ -1,0 +1,172 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Wallet, Plus, Trash2, Car, TrendingUp, AlertTriangle, Download, Upload,
+  X, Wand2, CalendarDays, ChevronLeft, ChevronRight, Target, Receipt,
+  ArrowUpRight, ArrowDownRight, LayoutDashboard, SlidersHorizontal,
+  Gauge, CalendarClock, CheckCircle2
+} from "lucide-react";
+
+const money = value => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Number(value || 0));
+const isoToday = () => new Date().toISOString().slice(0, 10);
+const dateKey = (year, month, day) => `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const expenseCategories = ["Alimentação", "Transporte", "Faculdade", "Lazer", "Parcelas", "Casa", "Saúde", "Carro", "Outros"];
+const incomeCategories = ["Estágio", "Pensão", "Freelance", "Venda de itens", "Reembolso", "Outros"];
+
+const initial = {
+  transactions: [
+    { id: 1, date: isoToday(), type: "receita", category: "Estágio", description: "Bolsa estágio", amount: 1800 },
+    { id: 2, date: isoToday(), type: "receita", category: "Pensão", description: "Pensão", amount: 296 },
+    { id: 3, date: isoToday(), type: "despesa", category: "Parcelas", description: "Celular e bicicleta", amount: 350 }
+  ],
+  goals: [
+    { id: 1, name: "Entrada do carro", target: 5000, saved: 0, deadline: "2026-12-31" },
+    { id: 2, name: "Reserva de emergência", target: 2000, saved: 0, deadline: "2027-03-31" },
+    { id: 3, name: "Intercâmbio Malta", target: 15000, saved: 0, deadline: "2027-12-31" }
+  ],
+  budgets: { Alimentação: 300, Transporte: 250, Faculdade: 150, Lazer: 150, Parcelas: 500, Casa: 200, Saúde: 100, Carro: 0, Outros: 100 }
+};
+
+function Card({ children, className = "" }) {
+  return <div className={`rounded-3xl border border-white/70 bg-white shadow-[0_10px_35px_rgba(23,61,39,0.07)] ${className}`}>{children}</div>;
+}
+
+export default function App() {
+  const [data, setData] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("financas-vinicius-v7"));
+      return saved || initial;
+    } catch { return initial; }
+  });
+  const [section, setSection] = useState("inicio");
+  const [floating, setFloating] = useState(false);
+  const [form, setForm] = useState({ type: "despesa", category: "Alimentação", description: "", amount: "", date: isoToday() });
+  const [smart, setSmart] = useState("");
+  const [preview, setPreview] = useState(null);
+  const [error, setError] = useState("");
+  const [car, setCar] = useState({ price: 38000, down: 5000, rate: 1.93, months: 48 });
+  const [calendarMonth, setCalendarMonth] = useState(() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); });
+  const [selectedDate, setSelectedDate] = useState(isoToday());
+  const [selectedGoalId, setSelectedGoalId] = useState(1);
+
+  useEffect(() => { try { localStorage.setItem("financas-vinicius-v7", JSON.stringify(data)); } catch {} }, [data]);
+
+  const income = useMemo(() => data.transactions.filter(x => x.type === "receita").reduce((s,x) => s + Number(x.amount), 0), [data]);
+  const expense = useMemo(() => data.transactions.filter(x => x.type === "despesa").reduce((s,x) => s + Number(x.amount), 0), [data]);
+  const byCategory = useMemo(() => data.transactions.filter(x => x.type === "despesa").reduce((acc,x) => ({ ...acc, [x.category]: (acc[x.category] || 0) + Number(x.amount) }), {}), [data]);
+  const biggest = Object.entries(byCategory).sort((a,b) => b[1] - a[1])[0];
+  const warnings = Object.entries(data.budgets).filter(([category, limit]) => limit > 0 && (byCategory[category] || 0) / limit >= .8);
+
+  const currentMonthKey = `${calendarMonth.getFullYear()}-${String(calendarMonth.getMonth()+1).padStart(2,"0")}`;
+  const monthTransactions = useMemo(() => data.transactions.filter(x => x.date?.slice(0,7) === currentMonthKey), [data, currentMonthKey]);
+  const monthExpense = monthTransactions.filter(x => x.type === "despesa").reduce((s,x) => s + Number(x.amount), 0);
+  const monthIncome = monthTransactions.filter(x => x.type === "receita").reduce((s,x) => s + Number(x.amount), 0);
+  const selectedTransactions = data.transactions.filter(x => x.date === selectedDate);
+  const selectedExpense = selectedTransactions.filter(x => x.type === "despesa").reduce((s,x) => s + Number(x.amount), 0);
+  const selectedIncome = selectedTransactions.filter(x => x.type === "receita").reduce((s,x) => s + Number(x.amount), 0);
+
+  const firstDay = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1).getDay();
+  const daysInMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth()+1, 0).getDate();
+  const calendarCells = [...Array(firstDay).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => i + 1)];
+
+  const selectedGoal = data.goals.find(g => Number(g.id) === Number(selectedGoalId)) || data.goals[0];
+  const todayDate = new Date(isoToday() + "T12:00:00");
+  const deadlineDate = new Date((selectedGoal?.deadline || isoToday()) + "T12:00:00");
+  const daysToGoal = Math.max(1, Math.ceil((deadlineDate - todayDate) / 86400000));
+  const remainingGoal = Math.max(0, Number(selectedGoal?.target || 0) - Number(selectedGoal?.saved || 0));
+  const dailySavingNeeded = remainingGoal / daysToGoal;
+  const weeklySavingNeeded = dailySavingNeeded * 7;
+  const monthlySavingNeeded = dailySavingNeeded * 30.44;
+  const incomeReference = monthIncome > 0 ? monthIncome : income;
+  const suggestedDailySpend = Math.max(0, incomeReference - monthlySavingNeeded) / 30.44;
+  const todayExpenses = data.transactions.filter(x => x.date === isoToday() && x.type === "despesa").reduce((s,x) => s + Number(x.amount), 0);
+  const dailyStatus = suggestedDailySpend <= 0 ? "critical" : todayExpenses <= suggestedDailySpend * .8 ? "safe" : todayExpenses <= suggestedDailySpend ? "attention" : "over";
+  const goalProgress = Math.min(100, Number(selectedGoal?.saved || 0) / Math.max(1, Number(selectedGoal?.target || 0)) * 100);
+  const monthlySurplus = Math.max(0, income - expense);
+  const monthsAtCurrentPace = monthlySurplus > 0 ? Math.ceil(remainingGoal / monthlySurplus) : null;
+
+  const financed = Math.max(0, car.price - car.down);
+  const rate = car.rate / 100;
+  const installment = rate && car.months ? financed * (rate * (1 + rate) ** car.months) / ((1 + rate) ** car.months - 1) : car.months ? financed / car.months : 0;
+
+  const categoryFor = (text, type) => {
+    const s = text.toLowerCase();
+    if (type === "receita") return /vendi|venda/.test(s) ? "Venda de itens" : /freela|bico|serviço/.test(s) ? "Freelance" : /pensão/.test(s) ? "Pensão" : /estágio|salário/.test(s) ? "Estágio" : "Outros";
+    if (/uber|99|ônibus|gasolina|posto|pedágio/.test(s)) return "Transporte";
+    if (/almoço|janta|lanche|mercado|comida|restaurante|ifood/.test(s)) return "Alimentação";
+    if (/pizza|cinema|show|bar|passeio/.test(s)) return "Lazer";
+    if (/faculdade|livro|curso|material|xerox/.test(s)) return "Faculdade";
+    if (/parcela|celular|bicicleta|fatura/.test(s)) return "Parcelas";
+    if (/carro|seguro|ipva|oficina|pneu/.test(s)) return "Carro";
+    if (/farmácia|consulta|remédio/.test(s)) return "Saúde";
+    return "Outros";
+  };
+
+  const interpret = () => {
+    setError("");
+    const raw = smart.trim();
+    const match = raw.match(/(?:r\$\s*)?(\d+(?:[.,]\d{1,2})?)/i);
+    if (!raw) return setError("Digite uma frase para interpretar.");
+    if (!match) return setError("Não encontrei um valor. Exemplo: Gastei 45 no almoço.");
+    const amount = Number(match[1].replace(",", "."));
+    const type = /recebi|ganhei|vendi|salário|estágio|pensão|freela|reembolso/i.test(raw) ? "receita" : "despesa";
+    const category = categoryFor(raw, type);
+    const description = raw.replace(match[0], "").replace(/^(gastei|paguei|comprei|recebi|ganhei|vendi)\s*/i, "").trim() || category;
+    setPreview({ id: Date.now(), date: form.date || isoToday(), type, category, description, amount });
+  };
+
+  const saveTransaction = item => {
+    if (!item.description || Number(item.amount) <= 0) return;
+    setData(d => ({ ...d, transactions: [{ ...item, id: Date.now(), amount: Number(item.amount) }, ...d.transactions] }));
+    setForm({ type: "despesa", category: "Alimentação", description: "", amount: "", date: selectedDate || isoToday() });
+    setSmart(""); setPreview(null); setError("");
+  };
+  const removeTransaction = id => setData(d => ({ ...d, transactions: d.transactions.filter(x => x.id !== id) }));
+  const backup = () => { const url = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)], { type:"application/json" })); const a=document.createElement("a"); a.href=url; a.download="backup-financas-vinicius.json"; a.click(); URL.revokeObjectURL(url); };
+  const restore = e => { const f=e.target.files?.[0]; if(!f)return; const rd=new FileReader(); rd.onload=()=>{try{setData(JSON.parse(rd.result))}catch{}}; rd.readAsText(f); };
+
+  const nav = [
+    ["inicio","Visão geral",LayoutDashboard],["calendario","Calendário",CalendarDays],
+    ["lancamentos","Lançamentos",Receipt],["orcamentos","Orçamentos",SlidersHorizontal],
+    ["metas","Metas",Target],["simulador","Simulador",Car]
+  ];
+
+  const statusStyle = {
+    safe: { box:"from-emerald-600 to-[#367c2b]", label:"Dentro do plano", text:"Você ainda está abaixo de 80% do limite sugerido de hoje." },
+    attention: { box:"from-amber-500 to-orange-500", label:"Atenção", text:"Você está perto do limite sugerido de hoje." },
+    over: { box:"from-red-600 to-rose-500", label:"Acima do plano", text:`Reduza ${money(Math.max(0,todayExpenses-suggestedDailySpend))} nos próximos dias para compensar.` },
+    critical: { box:"from-slate-700 to-slate-900", label:"Meta exige ajuste", text:"A renda registrada não cobre a economia mensal necessária. Ajuste o prazo ou a meta." }
+  }[dailyStatus];
+
+  return <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,#e7f4df_0,#f4f7f2_40%,#eef3ed_100%)] text-slate-900">
+    <header className="sticky top-0 z-30 bg-[#163b27]/95 text-white shadow-xl backdrop-blur"><div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8"><div><p className="text-[10px] font-black uppercase tracking-[.3em] text-[#ffde00]">Controle financeiro pessoal</p><h1 className="text-xl font-black sm:text-2xl">Finanças do Vinicius</h1></div><div className="flex gap-2"><button onClick={backup} className="rounded-xl bg-white/10 px-3 py-2 text-sm font-bold"><Download className="mr-1 inline h-4 w-4"/>Backup</button><label className="cursor-pointer rounded-xl bg-white px-3 py-2 text-sm font-bold text-[#163b27]"><Upload className="mr-1 inline h-4 w-4"/>Restaurar<input type="file" accept="application/json" className="hidden" onChange={restore}/></label></div></div></header>
+
+    <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 md:grid-cols-[220px_1fr] md:px-8">
+      <aside><div className="sticky top-24 flex gap-2 overflow-x-auto rounded-3xl bg-white/90 p-3 shadow-lg md:block">{nav.map(([id,label,Icon])=><button key={id} onClick={()=>setSection(id)} className={`flex min-w-max items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold md:mb-1 md:w-full ${section===id?"bg-[#367c2b] text-white shadow-lg":"text-slate-600 hover:bg-[#edf6e9]"}`}><Icon className="h-5 w-5"/>{label}</button>)}</div></aside>
+      <main className="min-w-0 space-y-6">
+        {section==="inicio"&&<>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{[["Saldo acumulado",income-expense,Wallet,"from-[#173d27] to-[#2f6d35]","text-white"],["Receitas",income,ArrowUpRight,"from-emerald-50 to-white","text-emerald-700"],["Despesas",expense,ArrowDownRight,"from-amber-50 to-white","text-amber-700"],["Meta escolhida",selectedGoal?.saved||0,Target,"from-[#fff8be] to-white","text-[#173d27]"]].map(([title,value,Icon,bg,color],i)=><motion.div key={title} initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{delay:i*.05}}><Card className={`bg-gradient-to-br ${bg} p-5`}><div className="flex justify-between"><div><p className={`text-sm ${color} opacity-75`}>{title}</p><p className={`mt-2 text-2xl font-black ${color}`}>{money(value)}</p></div><Icon className={`h-6 w-6 ${color}`}/></div></Card></motion.div>)}</div>
+
+          <Card className="overflow-hidden"><div className="grid lg:grid-cols-[1.2fr_.8fr]"><div className="p-6"><div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-black text-[#367c2b]">META INTELIGENTE</p><h2 className="text-2xl font-black">Plano para alcançar com excelência</h2></div><select value={selectedGoalId} onChange={e=>setSelectedGoalId(Number(e.target.value))} className="rounded-2xl border p-3 font-bold">{data.goals.map(g=><option key={g.id} value={g.id}>{g.name}</option>)}</select></div><div className="mt-5 grid gap-3 sm:grid-cols-4"><div className="rounded-2xl bg-slate-50 p-4"><p className="text-xs text-slate-500">Falta</p><b className="text-xl">{money(remainingGoal)}</b></div><div className="rounded-2xl bg-slate-50 p-4"><p className="text-xs text-slate-500">Por dia</p><b className="text-xl">{money(dailySavingNeeded)}</b></div><div className="rounded-2xl bg-slate-50 p-4"><p className="text-xs text-slate-500">Por semana</p><b className="text-xl">{money(weeklySavingNeeded)}</b></div><div className="rounded-2xl bg-slate-50 p-4"><p className="text-xs text-slate-500">Por mês</p><b className="text-xl">{money(monthlySavingNeeded)}</b></div></div><div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-100"><div className="h-full bg-gradient-to-r from-[#367c2b] to-[#79b13a]" style={{width:`${goalProgress}%`}}/></div><div className="mt-2 flex justify-between text-sm text-slate-500"><span>{goalProgress.toFixed(0)}% concluído</span><span>{daysToGoal} dias restantes</span></div></div>
+            <div className={`bg-gradient-to-br ${statusStyle.box} p-6 text-white`}><Gauge className="h-8 w-8 text-white/80"/><p className="mt-5 text-sm text-white/75">Gasto sugerido para hoje</p><p className="mt-1 text-4xl font-black">{money(suggestedDailySpend)}</p><p className="mt-4 text-sm">Gasto registrado hoje: <b>{money(todayExpenses)}</b></p><div className="mt-4 rounded-2xl bg-white/15 p-4"><b>{statusStyle.label}</b><p className="mt-1 text-sm text-white/85">{statusStyle.text}</p></div></div></div></Card>
+
+          <div className="grid gap-4 lg:grid-cols-3"><Card className="p-5"><p className="text-sm font-bold text-slate-400">MÊS ATUAL</p><h2 className="font-black">Resumo financeiro</h2><div className="mt-4 space-y-3"><div className="flex justify-between"><span>Entradas</span><b className="text-emerald-700">{money(monthIncome)}</b></div><div className="flex justify-between"><span>Saídas</span><b className="text-amber-700">{money(monthExpense)}</b></div><div className="flex justify-between border-t pt-3"><b>Resultado</b><b>{money(monthIncome-monthExpense)}</b></div></div></Card><Card className="p-5"><p className="text-sm font-bold text-slate-400">MONITORAMENTO</p><h2 className="font-black">Alertas inteligentes</h2><div className="mt-3">{warnings.length?warnings.slice(0,3).map(([c,l])=><div key={c} className="mb-2 rounded-xl bg-amber-50 p-3 text-sm"><b>{c}</b>: {Math.round((byCategory[c]||0)/l*100)}%</div>):<p className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800">Tudo dentro dos limites.</p>}</div></Card><Card className="p-5"><p className="text-sm font-bold text-slate-400">PREVISÃO</p><h2 className="font-black">Ritmo atual</h2><p className="mt-4 text-3xl font-black text-violet-700">{monthsAtCurrentPace?`${monthsAtCurrentPace} meses`:"Sem previsão"}</p><p className="mt-1 text-sm text-slate-500">Com sobra acumulada de {money(monthlySurplus)}.</p></Card></div>
+        </>}
+
+        {section==="calendario"&&<div className="grid gap-5 xl:grid-cols-[1fr_360px]"><Card className="p-5 sm:p-6"><div className="flex justify-between"><div><p className="text-sm font-bold text-[#367c2b]">CALENDÁRIO FINANCEIRO</p><h2 className="text-2xl font-black">{monthNames[calendarMonth.getMonth()]} de {calendarMonth.getFullYear()}</h2></div><div className="flex gap-2"><button onClick={()=>setCalendarMonth(d=>new Date(d.getFullYear(),d.getMonth()-1,1))} className="rounded-xl border p-2"><ChevronLeft/></button><button onClick={()=>setCalendarMonth(d=>new Date(d.getFullYear(),d.getMonth()+1,1))} className="rounded-xl border p-2"><ChevronRight/></button></div></div><div className="mt-5 grid grid-cols-7 gap-1 sm:gap-2">{weekDays.map(d=><div key={d} className="py-2 text-center text-xs font-black text-slate-400">{d}</div>)}{calendarCells.map((day,index)=>{if(!day)return <div key={`b-${index}`} className="min-h-20"/>;const key=dateKey(calendarMonth.getFullYear(),calendarMonth.getMonth(),day);const rows=data.transactions.filter(x=>x.date===key);const spent=rows.filter(x=>x.type==="despesa").reduce((s,x)=>s+Number(x.amount),0);const received=rows.filter(x=>x.type==="receita").reduce((s,x)=>s+Number(x.amount),0);const performance=spent===0?"neutral":spent<=suggestedDailySpend*.8?"safe":spent<=suggestedDailySpend?"attention":"over";const styles={neutral:"border-slate-100 bg-white",safe:"border-emerald-200 bg-emerald-50",attention:"border-amber-300 bg-amber-50",over:"border-red-300 bg-red-50"};return <button key={key} onClick={()=>setSelectedDate(key)} className={`min-h-20 rounded-2xl border p-2 text-left sm:min-h-24 ${selectedDate===key?"ring-2 ring-[#367c2b]":styles[performance]}`}><span className={`grid h-7 w-7 place-items-center rounded-full text-sm font-bold ${key===isoToday()?"bg-[#367c2b] text-white":""}`}>{day}</span>{spent>0&&<p className="mt-2 truncate text-[10px] font-bold sm:text-xs">-{money(spent)}</p>}{received>0&&<p className="truncate text-[10px] font-bold text-emerald-700 sm:text-xs">+{money(received)}</p>}</button>})}</div><div className="mt-4 flex flex-wrap gap-3 text-xs"><span className="rounded-full bg-emerald-50 px-3 py-1">Verde: confortável</span><span className="rounded-full bg-amber-50 px-3 py-1">Amarelo: perto do limite</span><span className="rounded-full bg-red-50 px-3 py-1">Vermelho: acima do sugerido</span></div></Card><div className="space-y-4"><Card className="p-5"><p className="text-xs font-black text-[#367c2b]">DIA SELECIONADO</p><h3 className="text-xl font-black">{new Date(selectedDate+"T12:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"long"})}</h3><div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-2xl bg-amber-50 p-3"><p className="text-xs">Gasto</p><b>{money(selectedExpense)}</b></div><div className="rounded-2xl bg-emerald-50 p-3"><p className="text-xs">Limite sugerido</p><b>{money(suggestedDailySpend)}</b></div></div><button onClick={()=>{setForm(f=>({...f,date:selectedDate}));setSection("lancamentos")}} className="mt-4 w-full rounded-2xl bg-[#367c2b] p-3 font-bold text-white"><Plus className="mr-2 inline h-4 w-4"/>Lançar neste dia</button></Card><Card className="p-5"><h3 className="font-black">Movimentações</h3><div className="mt-3 space-y-2">{selectedTransactions.length?selectedTransactions.map(x=><div key={x.id} className="rounded-xl bg-slate-50 p-3"><div className="flex justify-between"><b>{x.description}</b><b>{money(x.amount)}</b></div><p className="text-xs text-slate-500">{x.category}</p></div>):<p className="text-sm text-slate-500">Nenhum lançamento.</p>}</div></Card></div></div>}
+
+        {section==="lancamentos"&&<div className="space-y-5"><Card className="bg-gradient-to-br from-violet-50 to-white p-5"><h2 className="flex items-center gap-2 text-xl font-black"><Wand2 className="text-violet-700"/>Lançamento inteligente</h2><div className="mt-4 flex gap-2"><input value={smart} onChange={e=>setSmart(e.target.value)} onKeyDown={e=>e.key==="Enter"&&interpret()} placeholder="Gastei 22 de Uber" className="min-w-0 flex-1 rounded-2xl border p-3"/><button onClick={interpret} className="rounded-2xl bg-violet-700 px-5 font-bold text-white">Interpretar</button></div>{error&&<p className="mt-2 text-sm text-red-600">{error}</p>}{preview&&<div className="mt-3 rounded-xl bg-white p-4"><b>{preview.type} · {preview.category} · {money(preview.amount)}</b><p>{preview.description}</p><button onClick={()=>saveTransaction(preview)} className="mt-2 rounded-xl bg-[#367c2b] px-4 py-2 text-white">Confirmar</button></div>}</Card><Card className="p-5"><h2 className="text-xl font-black">Novo lançamento manual</h2><div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5"><input type="date" value={form.date} onChange={e=>setForm({...form,date:e.target.value})} className="rounded-2xl border p-3"/><select value={form.type} onChange={e=>setForm({...form,type:e.target.value,category:e.target.value==="receita"?"Freelance":"Alimentação"})} className="rounded-2xl border p-3"><option value="despesa">Despesa</option><option value="receita">Receita</option></select><select value={form.category} onChange={e=>setForm({...form,category:e.target.value})} className="rounded-2xl border p-3">{(form.type==="receita"?incomeCategories:expenseCategories).map(x=><option key={x}>{x}</option>)}</select><input value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="Descrição" className="rounded-2xl border p-3"/><input type="number" value={form.amount} onChange={e=>setForm({...form,amount:e.target.value})} placeholder="Valor" className="rounded-2xl border p-3"/></div><button onClick={()=>saveTransaction(form)} className="mt-4 rounded-2xl bg-[#173d27] px-5 py-3 font-bold text-white">Salvar</button></Card>{data.transactions.map(x=><Card key={x.id} className="mb-2 flex items-center gap-3 p-4"><div className="flex-1"><b>{x.description}</b><p className="text-xs text-slate-500">{x.category} · {new Date(x.date+"T12:00").toLocaleDateString("pt-BR")}</p></div><b>{x.type==="receita"?"+":"-"}{money(x.amount)}</b><button onClick={()=>removeTransaction(x.id)}><Trash2 className="h-4 w-4"/></button></Card>)}</div>}
+
+        {section==="orcamentos"&&<div className="grid gap-4 sm:grid-cols-2">{Object.entries(data.budgets).map(([c,l])=>{const spent=byCategory[c]||0;return <Card key={c} className="p-5"><div className="flex justify-between"><div><b>{c}</b><p className="text-sm">Gasto: {money(spent)}</p></div><span>{l?Math.round(spent/l*100):0}%</span></div><input type="number" value={l} onChange={e=>setData(d=>({...d,budgets:{...d.budgets,[c]:Number(e.target.value)}}))} className="mt-4 w-full rounded-xl border p-3"/></Card>})}</div>}
+
+        {section==="metas"&&<div className="space-y-4"><Card className="p-5"><p className="text-xs font-black text-[#367c2b]">META PRINCIPAL</p><select value={selectedGoalId} onChange={e=>setSelectedGoalId(Number(e.target.value))} className="mt-2 w-full rounded-2xl border p-3 font-bold">{data.goals.map(g=><option key={g.id} value={g.id}>{g.name}</option>)}</select></Card><div className="grid gap-4 sm:grid-cols-2">{data.goals.map(g=>{const p=Math.min(100,g.saved/g.target*100||0);return <Card key={g.id} className="p-5"><div className="flex justify-between"><div><p className="text-xs font-black text-[#367c2b]">META FINANCEIRA</p><h3 className="text-xl font-black">{g.name}</h3></div><span>{p.toFixed(0)}%</span></div><p className="mt-4 text-3xl font-black">{money(g.saved)}</p><div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100"><div className="h-full bg-[#367c2b]" style={{width:`${p}%`}}/></div><label className="mt-4 block text-xs font-bold text-slate-500">VALOR GUARDADO<input type="number" value={g.saved} onChange={e=>setData(d=>({...d,goals:d.goals.map(x=>x.id===g.id?{...x,saved:Number(e.target.value)}:x)}))} className="mt-1 w-full rounded-xl border p-3"/></label><label className="mt-3 block text-xs font-bold text-slate-500">PRAZO<input type="date" value={g.deadline||""} onChange={e=>setData(d=>({...d,goals:d.goals.map(x=>x.id===g.id?{...x,deadline:e.target.value}:x)}))} className="mt-1 w-full rounded-xl border p-3"/></label></Card>})}</div></div>}
+
+        {section==="simulador"&&<div className="grid gap-5 lg:grid-cols-2"><Card className="p-6"><h2 className="text-2xl font-black">Simulador do carro</h2>{Object.entries(car).map(([k,v])=><label key={k} className="mt-3 block text-xs font-bold">{{price:"PREÇO",down:"ENTRADA",rate:"JUROS (%)",months:"MESES"}[k]}<input type="number" value={v} onChange={e=>setCar({...car,[k]:Number(e.target.value)})} className="mt-1 w-full rounded-xl border p-3"/></label>)}</Card><Card className="bg-gradient-to-br from-[#173d27] to-[#367c2b] p-6 text-white"><p>Parcela estimada</p><p className="mt-2 text-5xl font-black text-[#ffde00]">{money(installment)}</p><p className="mt-5">Custo mensal com uso: <b>{money(installment+500)}</b></p></Card></div>}
+      </main>
+    </div>
+
+    <div className="fixed left-3 top-1/2 z-40 -translate-y-1/2"><div className="flex items-center gap-2"><button onClick={()=>setFloating(!floating)} className="grid h-14 w-14 place-items-center rounded-full bg-[#367c2b] text-white shadow-2xl ring-4 ring-white/80">{floating?<X/>:<Plus/>}</button>{floating&&<motion.div initial={{opacity:0,x:-10}} animate={{opacity:1,x:0}} className="w-52 rounded-2xl bg-white p-2 shadow-2xl"><button onClick={()=>{setSection("lancamentos");setFloating(false)}} className="w-full rounded-xl p-3 text-left font-bold hover:bg-slate-100">Lançar gasto</button><button onClick={()=>{setSection("calendario");setFloating(false)}} className="w-full rounded-xl p-3 text-left font-bold hover:bg-slate-100">Abrir calendário</button><button onClick={()=>{setSection("metas");setFloating(false)}} className="w-full rounded-xl p-3 text-left font-bold hover:bg-slate-100">Atualizar meta</button></motion.div>}</div></div>
+  </div>;
+}
