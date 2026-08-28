@@ -1,0 +1,672 @@
+{
+  "transactions": [
+    {
+      "id": 1787938269985.6108,
+      "date": "2026-08-28",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "SOBRA DO MÊS PASSADO",
+      "amount": 45.54,
+      "goalId": ""
+    },
+    {
+      "id": 1787924562415.927,
+      "date": "2026-09-01",
+      "type": "receita",
+      "method": "debito",
+      "category": "Pensão",
+      "description": "Pensão",
+      "amount": 296.84,
+      "goalId": ""
+    },
+    {
+      "id": 1787924496282.9321,
+      "date": "2026-08-31",
+      "type": "receita",
+      "method": "debito",
+      "category": "Freelance",
+      "description": "Home pizza",
+      "amount": 130,
+      "goalId": ""
+    },
+    {
+      "id": 1787924461647.6467,
+      "date": "2026-08-31",
+      "type": "receita",
+      "method": "debito",
+      "category": "Estágio",
+      "description": "Salário",
+      "amount": 1800,
+      "goalId": ""
+    },
+    {
+      "id": 1787920698453,
+      "date": "2026-07-30",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "SOBRA DO MÊS PASSADO",
+      "amount": 19.98
+    },
+    {
+      "id": 1787920736675,
+      "date": "2026-08-27",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "??",
+      "amount": 13
+    },
+    {
+      "id": 1787920689960,
+      "date": "2026-08-26",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "André da empada",
+      "amount": 17.5
+    },
+    {
+      "id": 1787920671604,
+      "date": "2026-08-26",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Contas",
+      "description": "Conta internet",
+      "amount": 76.75
+    },
+    {
+      "id": 1787920554109,
+      "date": "2026-08-26",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Lazer",
+      "description": "sinuca",
+      "amount": 9
+    },
+    {
+      "id": 1787920542281,
+      "date": "2026-08-24",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "Faculdade",
+      "amount": 7.5
+    },
+    {
+      "id": 1787920522787,
+      "date": "2026-08-21",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "Faculdade",
+      "amount": 18
+    },
+    {
+      "id": 1787920530689,
+      "date": "2026-08-19",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "DEERE",
+      "amount": 7.5
+    },
+    {
+      "id": 1787920493712,
+      "date": "2026-08-17",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Lazer",
+      "description": "Gasolina Yuzo",
+      "amount": 100
+    },
+    {
+      "id": 1787920487368,
+      "date": "2026-08-17",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "DEERE",
+      "amount": 20.5
+    },
+    {
+      "id": 1787920474952,
+      "date": "2026-08-14",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "Ássai",
+      "amount": 15.14
+    },
+    {
+      "id": 1787920401733,
+      "date": "2026-08-14",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "DEERE",
+      "amount": 5.5
+    },
+    {
+      "id": 1787920393358,
+      "date": "2026-08-14",
+      "type": "despesa",
+      "method": "debito",
+      "category": "FATURA",
+      "description": "PARTE CAMILA",
+      "amount": 543
+    },
+    {
+      "id": 1787920397262,
+      "date": "2026-08-13",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "kalunga camila",
+      "amount": 85.8
+    },
+    {
+      "id": 1787920390592,
+      "date": "2026-08-12",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "ADYEN?",
+      "amount": 17.95
+    },
+    {
+      "id": 1787920379063,
+      "date": "2026-08-11",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "Conserto da bike",
+      "amount": 45
+    },
+    {
+      "id": 1787920306818,
+      "date": "2026-08-11",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "DEERE",
+      "amount": 15.5
+    },
+    {
+      "id": 1787920330440,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": ".",
+      "amount": 8
+    },
+    {
+      "id": 1787920285448,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Transporte",
+      "description": "Uber",
+      "amount": 9.94
+    },
+    {
+      "id": 1787920329670,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "DEERE",
+      "amount": 15.5
+    },
+    {
+      "id": 1787920243080,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "RENNER",
+      "description": "CARTÃO RENNER",
+      "amount": 55.69
+    },
+    {
+      "id": 1787920225922,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "victor",
+      "amount": 115
+    },
+    {
+      "id": 1787920245160,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Lazer",
+      "description": "mercado livre",
+      "amount": 42
+    },
+    {
+      "id": 1787920202509,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Transporte",
+      "description": "Uber",
+      "amount": 19.7
+    },
+    {
+      "id": 1787920170693,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": ".",
+      "amount": 20
+    },
+    {
+      "id": 1787920121277,
+      "date": "2026-08-10",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "campinas shopping",
+      "amount": 96.7
+    },
+    {
+      "id": 1787920047314,
+      "date": "2026-08-07",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "Faculdade",
+      "amount": 59.22
+    },
+    {
+      "id": 1787919990511,
+      "date": "2026-08-07",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "André da empada",
+      "amount": 35.5
+    },
+    {
+      "id": 1787919920440,
+      "date": "2026-08-07",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Lazer",
+      "description": "Uber",
+      "amount": 9.94
+    },
+    {
+      "id": 1787919981188,
+      "date": "2026-08-06",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "Conserto da bike",
+      "amount": 75
+    },
+    {
+      "id": 1787919841282,
+      "date": "2026-08-05",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Transporte",
+      "description": "Gasolina Sophia",
+      "amount": 50
+    },
+    {
+      "id": 1787919884246,
+      "date": "2026-08-05",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "Faculdade",
+      "amount": 44.9
+    },
+    {
+      "id": 1787919777829,
+      "date": "2026-08-05",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Contas",
+      "description": "Conta internet",
+      "amount": 75
+    },
+    {
+      "id": 1787919776403,
+      "date": "2026-08-05",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "Cartão",
+      "amount": 200
+    },
+    {
+      "id": 1787919773251,
+      "date": "2026-08-04",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "campinas shopping",
+      "amount": 16
+    },
+    {
+      "id": 1787919677068,
+      "date": "2026-08-03",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "dinheiro pra mãe",
+      "amount": 135
+    },
+    {
+      "id": 1787919700289,
+      "date": "2026-08-01",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "doddy",
+      "amount": 45
+    },
+    {
+      "id": 1787919632191,
+      "date": "2026-08-03",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Outros",
+      "description": "Agua na vó",
+      "amount": 34
+    },
+    {
+      "id": 1787919645725,
+      "date": "2026-07-31",
+      "type": "despesa",
+      "method": "debito",
+      "category": "Alimentação",
+      "description": "sextinha",
+      "amount": 14
+    },
+    {
+      "id": 1787919589711,
+      "date": "2026-07-31",
+      "type": "despesa",
+      "method": "debito",
+      "category": "FATURA",
+      "description": "Cartão",
+      "amount": 1330
+    },
+    {
+      "id": 1787919452863,
+      "date": "2026-08-24",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "Home pizza",
+      "amount": 130
+    },
+    {
+      "id": 1787919435239,
+      "date": "2026-08-24",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "mãe",
+      "amount": 30
+    },
+    {
+      "id": 1787919366998,
+      "date": "2026-08-17",
+      "type": "receita",
+      "method": "debito",
+      "category": "Freelance",
+      "description": "Home pizza",
+      "amount": 130
+    },
+    {
+      "id": 1787919328339,
+      "date": "2026-08-14",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "MÃE",
+      "amount": 16
+    },
+    {
+      "id": 1787919341469,
+      "date": "2026-08-14",
+      "type": "receita",
+      "method": "debito",
+      "category": "FATURA",
+      "description": "PARTE CAMILA",
+      "amount": 543
+    },
+    {
+      "id": 1787918943666,
+      "date": "2026-08-13",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "kalunga camila",
+      "amount": 80
+    },
+    {
+      "id": 1787918660250,
+      "date": "2026-08-12",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "mãe",
+      "amount": 10
+    },
+    {
+      "id": 1787918549073,
+      "date": "2026-08-12",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "Reserva",
+      "amount": 45
+    },
+    {
+      "id": 1787918528533,
+      "date": "2026-08-10",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "Reserva",
+      "amount": 185
+    },
+    {
+      "id": 1787918484063,
+      "date": "2026-08-10",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "mãe",
+      "amount": 90
+    },
+    {
+      "id": 1787918442304,
+      "date": "2026-08-03",
+      "type": "receita",
+      "method": "debito",
+      "category": "Freelance",
+      "description": "Home pizza",
+      "amount": 151.66
+    },
+    {
+      "id": 1787918390275,
+      "date": "2026-08-03",
+      "type": "receita",
+      "method": "debito",
+      "category": "Pensão",
+      "description": "Pensão",
+      "amount": 296.84
+    },
+    {
+      "id": 1787918357836,
+      "date": "2026-07-03",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "Dani",
+      "amount": 20
+    },
+    {
+      "id": 1787918325979,
+      "date": "2026-07-30",
+      "type": "receita",
+      "method": "debito",
+      "category": "Outros",
+      "description": "SOBRA DO MÊS PASSADO",
+      "amount": 21.79
+    },
+    {
+      "id": 1787918294982,
+      "date": "2026-07-30",
+      "type": "receita",
+      "method": "debito",
+      "category": "Estágio",
+      "description": "Salário estágio",
+      "amount": 1800
+    }
+  ],
+  "goals": [
+    {
+      "id": 1,
+      "name": "Entrada do carro",
+      "target": 5000,
+      "saved": 0,
+      "deadline": ""
+    },
+    {
+      "id": 2,
+      "name": "Reserva de emergência",
+      "target": 2000,
+      "saved": 0,
+      "deadline": ""
+    },
+    {
+      "id": 3,
+      "name": "Intercâmbio Malta",
+      "target": 15000,
+      "saved": 0,
+      "deadline": ""
+    }
+  ],
+  "budgets": {
+    "Alimentação": 50,
+    "Transporte": 100,
+    "Lazer": 150,
+    "Casa": 100,
+    "Saúde": 100,
+    "Contas": 152,
+    "RENNER": 55.69,
+    "FATURA": 2000,
+    "GASTOS A MAIS NO CARTÃO": 200
+  },
+  "categories": [
+    "Alimentação",
+    "Transporte",
+    "Faculdade",
+    "Lazer",
+    "Parcelas",
+    "Casa",
+    "Saúde",
+    "Carro",
+    "Estágio",
+    "Pensão",
+    "Freelance",
+    "Outros",
+    "Investimento para meta",
+    "Fatura 2026",
+    "Contas",
+    "RENNER",
+    "FATURA",
+    "GASTOS A MAIS NO CARTÃO"
+  ],
+  "descriptions": [
+    "Mercado",
+    "Uber",
+    "Gasolina",
+    "Faculdade",
+    "Celular",
+    "Salário estágio",
+    "Pensão",
+    "Fatura",
+    "Agua na vó",
+    "dinheiro pra mãe",
+    "Home pizza",
+    "Cartão",
+    "Conta internet",
+    "Gasolina Sophia",
+    "Conserto da bike",
+    "André da empada",
+    "campinas shopping",
+    "mãe",
+    "mercado livre",
+    ".",
+    "victor",
+    "CARTÃO RENNER",
+    "DEERE",
+    "ADYEN",
+    "kalunga camila",
+    "Ássai",
+    "Gasolina Yuzo",
+    "SOBRA DO MÊS PASSADO",
+    "Dani",
+    "Reserva",
+    "PARTE CAMILA",
+    "MÃE",
+    "sextinha",
+    "doddy",
+    "oswaldo wilson",
+    "ADYEN?",
+    "sinuca",
+    "??"
+  ],
+  "settings": {
+    "reserveMode": "fixed",
+    "reservePercent": 15,
+    "reserveFixed": 200,
+    "payday": 30,
+    "advanceWeekends": true,
+    "payOverrides": {}
+  },
+  "chat": [
+    {
+      "r": "user",
+      "t": "Quanto foi no crédito?"
+    },
+    {
+      "r": "bot",
+      "t": "Crédito Nubank no ciclo: R$ 0,00."
+    },
+    {
+      "r": "user",
+      "t": "Quanto gastei?"
+    },
+    {
+      "r": "bot",
+      "t": "Despesas: R$ 3.503,73. Investimentos: R$ 0,00. Pergunte sobre crédito, débito, maior categoria, metas ou margem."
+    },
+    {
+      "r": "user",
+      "t": "Quanto investi?"
+    },
+    {
+      "r": "bot",
+      "t": "Você investiu R$ 0,00 em metas neste ciclo."
+    }
+  ],
+  "investmentSettings": {
+    "monthlyTarget": 300
+  },
+  "investmentAssets": [],
+  "networthHistory": []
+}
